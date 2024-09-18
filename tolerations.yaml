@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: apple
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  tolerations:
+  - key: "fruts"
+    value: "apple"
+    effect: "NoSchedule"

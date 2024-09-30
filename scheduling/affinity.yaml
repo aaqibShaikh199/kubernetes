@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: specific-az
+  namespace: az
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: with-node-affinity
+  template:
+    metadata:
+      labels:
+        app: with-node-affinity
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: az
+                    operator: Exists
+      containers:
+        - name: with-node-affinity
+          image: nginx

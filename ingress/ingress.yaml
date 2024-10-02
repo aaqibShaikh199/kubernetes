@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /docs
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/group.name: alb-group
+    alb.ingress.kubernetes.io/load-balancer-name: <YOUR-LOAD-BALANCER-NAME-HERE>
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/subnets: subnet-04f7380cce52a50ae, subnet-0bce731711d29a363
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+  name: <YOUR-INGRESS-NAME-HERE>
+  namespace: <YOUR-NAMESPACE-HERE>
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /nginx
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-svc
+              port:
+                number: 80

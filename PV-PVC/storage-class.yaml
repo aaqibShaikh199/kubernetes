@@ -1,5 +1,8 @@
-#REFERENCE
-#https://medium.com/@ravipatel.it/understanding-working-with-kubernetes-storageclass-with-example-9825208a40b8
+# REFERENCE
+# Source: https://medium.com/@ravipatel.it/understanding-working-with-kubernetes-storageclass-with-example-9825208a40b8
+
+---
+# STORAGE-CLASS
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -14,28 +17,8 @@ allowVolumeExpansion: true
 mountOptions:
   - debug
 
-
-
-#STORAGE-CLASS-POD
-apiVersion: v1
-kind: Pod
-metadata:
-  name: my-pod
-spec:
-  containers:
-  - name: my-container
-    image: nginx
-    volumeMounts:
-    - mountPath: /usr/share/nginx/html
-      name: my-storage
-  volumes:
-  - name: my-storage
-    persistentVolumeClaim:
-      claimName: my-pvc
-
-
-
-#STORAGE-CLASS-PVC
+---
+# STORAGE-CLASS-PVC
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -47,3 +30,21 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: standard
+
+---
+# STORAGE-CLASS-POD
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: my-storage
+  volumes:
+    - name: my-storage
+      persistentVolumeClaim:
+        claimName: my-pvc

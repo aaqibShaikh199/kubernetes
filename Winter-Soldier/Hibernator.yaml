@@ -1,0 +1,32 @@
+apiVersion: pincher.devtron.ai/v1alpha1
+kind: Hibernator
+metadata:
+  name: k8s-hibernator-v1
+spec:
+  action: sleep
+  timeRangesWithZone:
+    timeZone: "Asia/Kolkata"
+    timeRanges:
+      - timeFrom: 00:00          # 12:00 AM (midnight)
+        timeTo: 23:59:59        # 11:59:59 PM
+        weekdayFrom: Sat
+        weekdayTo: Sun
+      - timeFrom: 00:00          # 12:00 AM (midnight)
+        timeTo: 09:00          # 9:00 AM
+        weekdayFrom: Mon
+        weekdayTo: Fri
+      - timeFrom: 21:00:00       # 9:00 PM
+        timeTo: 23:59:59        # 11:59:59 PM
+        weekdayFrom: Mon
+        weekdayTo: Fri
+  selectors:
+    - exclusions:
+        - namespaceSelector:
+            name: kube-system
+          objectSelector:
+            type: Deployment
+        - namespaceSelector:
+            name: stag
+          objectSelector:
+            name: ''
+            type: Deployment

@@ -1,3 +1,6 @@
+# Operator: When using the 'Exists' operator, you only need to specify the key.
+# The toleration will match any taint with the specified key, regardless of its value.
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,5 +23,36 @@ spec:
         image: nginx
       tolerations:
       - key: "hello"
-        operator: "Exists"
+        operator: "Exists"  # This toleration matches any taint with key "hello" regardless of the value.
         effect: "NoSchedule"
+
+
+# Operator: When using the 'Equal' operator, you must specify both the key and the value.
+# The toleration will only match taints that have exactly the same key and value.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-equal-deployment
+  labels:
+    app: nginx-equal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-equal
+  template:
+    metadata:
+      labels:
+        app: nginx-equal
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+      tolerations:
+        - key: "example-key"
+          operator: "Equal"  # This toleration matches only taints with key "example-key" and value "example-value".
+          value: "example-value"
+          effect: "NoSchedule"
